@@ -1,7 +1,5 @@
 $(document).ready(function() {
-
-
-    //draw('57b61e14399e2b156f2ceded');
+    
 
     $("canvas").each(function(index) {
         draw($(this).attr('id'));
@@ -19,7 +17,8 @@ $(document).ready(function() {
                     data.push(result[0].answers[i].votes);
                     labels.push(result[0].answers[i].answer);
                 }
-
+                //Chart.defaults.global.legend.display = false;
+                //Chart.defaults.global.tooltips.enabled = false;
                 var myChart = new Chart(ctx, {
                     type: 'pie',
                     data: {
@@ -27,17 +26,32 @@ $(document).ready(function() {
                         datasets: [{
                             data: data,
                             backgroundColor: [
-                                'rgba(255, 99, 132, 0.5)',
-                                'rgba(54, 162, 235, 0.5)',
-                                'rgba(255, 206, 86, 0.5)',
-                                'rgba(75, 192, 192, 0.5)',
-                                'rgba(153, 102, 255, 0.5)',
-                                'rgba(255, 159, 64, 0.5)'
+                                'rgba(217, 102, 102, 0.9)',
+                                'rgba(129, 172, 139, 0.9)',
+                                'rgba(242, 229, 162, 0.9)',
+                                'rgba(248, 152, 131, 0.9)',
+                                'rgba(153, 102, 255, 0.9)',
+                                'rgba(255, 159, 64, 0.9)'
                             ],
                             borderWidth: 1
                         }]
                     },
                     options: {
+                        title: {
+                            display: true,
+                            text: result[0].question,
+                            fontColor: 'white',
+                            fontSize: 22,
+                            fontStyle: 'Normal',
+                            fontFamily: "'Roboto','Helvetica Neue','Helvetica','Arial',sans-serif"
+                        },
+                        legend: {
+                            position: 'bottom',
+                            fullWidth: true,
+                            labels: {
+                                fontColor: 'white'
+                            }
+                        },
                         maintainAspectRatio: true,
                         responsive: false,
                     }

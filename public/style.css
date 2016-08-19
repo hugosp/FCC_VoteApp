@@ -1,9 +1,22 @@
+body {
+    background-color: #425957;
+    color: white;
+    font-family: "Roboto","Helvetica Neue","Helvetica","Arial",sans-serif;
+}
+
+.container {
+    top: 40px;
+}
+
 ul.nav {
+    width: 100%;
+    z-index: 999;
     list-style-type: none;
     margin: 0;
     padding: 0;
     overflow: hidden;
     background-color: #333;
+    position : fixed;
 }
 ul.nav li { float:left; }
 
@@ -11,10 +24,12 @@ ul.nav li a {
     display: inline-block;
     color: #f2f2f2;
     text-align: center;
-    padding: 14px 16px;
+    padding: 16px 16px;
     text-decoration: none;
     transition: 0.3s;
     font-size: 17px;
 }
 
 ul.nav li a:hover {background-color: #555;}
+
+
