@@ -1,0 +1,16 @@
+extends layout
+
+block content
+    h1 Add Poll
+
+    form(name="addPoll", method="post" action="/add")
+        .row
+            .column
+                span.label Question ?
+                input(type="text", name="question")
+                span.label Answer 1
+                input(type="text", name="answer1")
+                span.label Answer 2
+                input(type="text", name="answer2")
+
+        input(type="submit", value="add Poll")

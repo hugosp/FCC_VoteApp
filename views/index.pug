@@ -1,0 +1,12 @@
+extends layout
+
+block content
+    h1 Polls
+    ul
+        for poll in polls
+            li.bold= poll.question
+                canvas(id= poll._id width=200 height=200)
+                ul
+                    for ans in poll.answers
+                        li= ans.answer
+                            span.vote= ans.votes
