@@ -2,19 +2,15 @@ extends layout
 
 block content
     .container
-        .row
-            for poll in polls
-                .column
-                    canvas(id= poll._id width=300 height=300)
-
-//
-    objects = [obj0, obj1, obj2, obj3, obj4, obj5]
-
-    table
-      thead
-      tbody
-        - var columns = 3
-        - for (var i = 0; i < objects.length; i=i+columns)
-          tr
-            - for (var j = 0; j < columns && i+j < objects.length; j++)
-              td=objects[i+j]
+        each poll in polls
+            .row
+                each item in poll
+                    .column
+                        canvas(id= item._id width=300 height=300)
+                        ul
+                            each ans,index in item.answers
+                                li
+                                    .legend
+                                        .box(style='background-color: '+bg[index])
+                                        .ans(data=ans._id data-canvasID=item._id data-votes=ans.votes)= ans.answer
+                                        .count= ans.votes

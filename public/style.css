@@ -7,6 +7,23 @@ body {
 .container {
     top: 40px;
 }
+.legend {
+    clear:both;
+}
+
+.legend div {
+    float:left;
+}
+
+.box {
+    width: 40px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+li {
+    list-style-type: none;
+}
 
 ul.nav {
     width: 100%;

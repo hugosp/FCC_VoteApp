@@ -2,8 +2,27 @@ var ansNr = 3;
 
 $(document).ready(function() {
     $('#more').click(function(){
-        $(".addform").append('<span class="label">Answer '+ansNr+'<input type="text" name="answer'+ansNr+'">');
+        $(".addform").append('<span class="label">Answer '+ansNr+'<input type="text" name="answer">');
         ansNr++;
+    });
+
+    $('.ans').click(function() {
+        var cId = $(this).attr('data-canvasID');
+        var id = $(this).attr('data');
+        var ans = $(this).html();
+        var nuffer = $(this).attr('data-votes');
+
+        $.ajax({
+            url: '/vote/' + id + '/' + ans,
+            success: function(result) {
+                console.log(id + ' : '+ans);
+                nuffer++;
+                //$(this).html(nuffer);
+                $(this).attr('data-votes',nuffer);
+                draw(cId);
+                console.log(nuffer);
+            }
+        });
     });
 
     $("canvas").each(function(index) {
@@ -22,7 +41,7 @@ $(document).ready(function() {
                     data.push(result[0].answers[i].votes);
                     labels.push(result[0].answers[i].answer);
                 }
-                //Chart.defaults.global.legend.display = false;
+                Chart.defaults.global.legend.display = false;
                 //Chart.defaults.global.tooltips.enabled = false;
                 var myChart = new Chart(ctx, {
                     type: 'pie',
@@ -50,25 +69,11 @@ $(document).ready(function() {
                             fontStyle: 'Normal',
                             fontFamily: "'Roboto','Helvetica Neue','Helvetica','Arial',sans-serif"
                         },
-                        legend: {
-                            position: 'bottom',
-                            fullWidth: true,
-                            onClick: vote,
-                            labels: {
-                                fontColor: 'white'
-                            }
-                        },
                         maintainAspectRatio: true,
                         responsive: false,
                     }
                 });
             }
         });
-    }
-
-    function vote(ev,item) {
-        //alert(ev + ' : '+ item);
-        console.log(item);
-        console.log(item.text);
     }
 });
