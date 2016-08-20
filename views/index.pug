@@ -6,3 +6,15 @@ block content
             for poll in polls
                 .column
                     canvas(id= poll._id width=300 height=300)
+
+//
+    objects = [obj0, obj1, obj2, obj3, obj4, obj5]
+
+    table
+      thead
+      tbody
+        - var columns = 3
+        - for (var i = 0; i < objects.length; i=i+columns)
+          tr
+            - for (var j = 0; j < columns && i+j < objects.length; j++)
+              td=objects[i+j]

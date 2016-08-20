@@ -23,7 +23,7 @@ router.get('/add', function(req, res, next) {
 
 
 router.post('/add', function(req, res, next) {
-	for() // here be scanning answers typ...
+	//for() // here be scanning answers typ...
 	var newPoll = Poll({
 		question: req.body.question,
 		answers: [{answer: req.body.answer1, votes:0},{answer: req.body.answer2, votes:0}],
