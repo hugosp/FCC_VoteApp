@@ -5,15 +5,4 @@ block content
         .row
             for poll in polls
                 .column
-                    // .question= poll.question
                     canvas(id= poll._id width=300 height=300)
-    
-    
-    
-    
-    
-    
-                // ul
-                    for ans in poll.answers
-                        li= ans.answer
-                            span.vote= ans.votes

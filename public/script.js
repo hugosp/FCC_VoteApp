@@ -1,5 +1,10 @@
+var ansNr = 3;
+
 $(document).ready(function() {
-    
+    $('#more').click(function(){
+        $(".addform").append('<span class="label">Answer '+ansNr+'<input type="text" name="answer'+ansNr+'">');
+        ansNr++;
+    });
 
     $("canvas").each(function(index) {
         draw($(this).attr('id'));
@@ -48,6 +53,7 @@ $(document).ready(function() {
                         legend: {
                             position: 'bottom',
                             fullWidth: true,
+                            onClick: vote,
                             labels: {
                                 fontColor: 'white'
                             }
@@ -58,5 +64,11 @@ $(document).ready(function() {
                 });
             }
         });
+    }
+
+    function vote(ev,item) {
+        //alert(ev + ' : '+ item);
+        console.log(item);
+        console.log(item.text);
     }
 });

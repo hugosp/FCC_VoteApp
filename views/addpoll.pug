@@ -4,12 +4,14 @@ block content
     .container
         form(name="addPoll", method="post" action="/add")
             .row
-                .column
+                .column.addform
                     span.label Question ?
                     input(type="text", name="question")
                     span.label Answer 1
                     input(type="text", name="answer1")
                     span.label Answer 2
                     input(type="text", name="answer2")
-    
+            a(id="more" href="#") + Add One More Answer
+            br
+            br
             input(type="submit", value="add Poll")
