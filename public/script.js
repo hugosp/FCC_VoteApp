@@ -6,21 +6,17 @@ $(document).ready(function() {
         ansNr++;
     });
 
-    $('.ans').click(function() {
+    $('canvas').click(function(){
+        window.location.href = '/view/'+$(this).attr('id');
+    });
+
+    $('.vote').click(function() {
         var cId = $(this).attr('data-canvasID');
         var id = $(this).attr('data');
-        var ans = $(this).html();
-        var nuffer = $(this).attr('data-votes');
-
         $.ajax({
-            url: '/vote/' + id + '/' + ans,
+            url: '/vote/' + id,
             success: function(result) {
-                console.log(id + ' : '+ans);
-                nuffer++;
-                //$(this).html(nuffer);
-                $(this).attr('data-votes',nuffer);
                 draw(cId);
-                console.log(nuffer);
             }
         });
     });
@@ -70,7 +66,7 @@ $(document).ready(function() {
                             fontFamily: "'Roboto','Helvetica Neue','Helvetica','Arial',sans-serif"
                         },
                         maintainAspectRatio: true,
-                        responsive: false,
+                        responsive: true,
                     }
                 });
             }

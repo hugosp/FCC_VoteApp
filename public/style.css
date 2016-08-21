@@ -21,6 +21,10 @@ body {
     margin-right: 10px;
 }
 
+.vote {
+    cursor: pointer;
+}
+
 li {
     list-style-type: none;
 }

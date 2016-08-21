@@ -14,19 +14,25 @@ var bg =  [
 ];
 
 router.get('/', function(req, res, next) {
-	Poll.find({},function(err,polls) {
+	Poll.find({}).sort('-created_at').limit(6).exec(function(err,polls) {
 		res.render('index', { polls: getRows(polls),bg: bg });
 	});
 });
 
-router.get('/vote/:id/:ans', function(req, res, next) {
+router.get('/view/:id', function(req, res, next) {
+	Poll.find({_id:req.params.id},function(err,polls) {
+		res.render('single',{poll:polls, bg:bg});
+	});
+});
+
+router.get('/vote/:id', function(req, res, next) {
 	var query = {'answers._id': req.params.id};
 	var update = {$inc: {'answers.$.votes': 1}};
 	var options = {new: true};
 
 	Poll.update(query,update, function(err,doc) {
 		if(err) throw err;
-		console.log(doc);
+		//console.log(doc);
 		res.send(doc);
 	});
 });
