@@ -1,6 +1,7 @@
 'use strict';
 
 var express 	= require('express');
+var passport    = require('passport');
 var Poll        = require('../models/poll.js');
 var router 		= express.Router();
 
@@ -15,7 +16,7 @@ var bg =  [
 
 router.get('/', function(req, res, next) {
 	Poll.find({}).sort('-created_at').limit(6).exec(function(err,polls) {
-		res.render('index', { polls: getRows(polls),bg: bg });
+		res.render('index', { polls: getRows(polls),bg: bg, user: req.user });
 	});
 });
 
@@ -68,6 +69,33 @@ router.post('/add', function(req, res, next) {
 
 	res.redirect('/');
 });
+
+
+// ----- TWITT -----------------------------------------------------------------
+/*
+router.get('/login',
+  function(req, res){
+    res.render('login');
+  });
+*/
+router.get('/login/twitter',
+  passport.authenticate('twitter'));
+
+router.get('/login/twitter/return', 
+  passport.authenticate('twitter', { failureRedirect: '/login' }),
+  function(req, res) {
+    res.redirect('/');
+  });
+
+router.get('/profile',
+  require('connect-ensure-login').ensureLoggedIn(),
+  function(req, res){
+    res.render('profile', { user: req.user });
+  });
+
+
+// ----- TWITT -----------------------------------------------------------------
+
 
 
 function getRows(items) {

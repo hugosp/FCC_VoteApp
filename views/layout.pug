@@ -12,9 +12,16 @@ html
         link(rel='stylesheet', href='/public/style.css')
     body
         ul.nav
+            if(user)
+                li
+                    a(href='/profile')= user.username
+            else
+                li
+                    a(href='/login/twitter') Login
             li
                 a(href='/') List Polls
             li
                 a(href='/add') Add Poll
+            
     .container
         block content
