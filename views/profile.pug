@@ -1,0 +1,22 @@
+extends layout
+
+block content
+    .container
+        h1 User Details :
+        ul
+            li UserID :
+                = user.id
+            li UserName :
+                = user.username
+            li RealName :
+                = user.displayName
+            if (user.emails)
+                li Email :  = user.emails[0].value
+
+        h3 Your Polls :
+        ul
+            each poll in polls
+                each item in poll
+                    li
+                        blockquote
+                            a(href='/view/'+item._id)= item.question

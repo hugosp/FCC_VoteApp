@@ -5,7 +5,7 @@ body {
 }
 
 .container {
-    top: 40px;
+    top: 90px;
 }
 .legend {
     clear:both;
@@ -27,6 +27,22 @@ body {
 
 li {
     list-style-type: none;
+}
+
+.right {
+    float: right;
+}
+.left {
+    float: left;
+}
+
+.inactive {
+    text-decoration: line-through;
+}
+
+button {
+    background-color: #5DA66F;
+    border-color: white;
 }
 
 ul.nav {

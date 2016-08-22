@@ -12,7 +12,7 @@ require('dotenv').config();
 passport.use(new Strategy({
     consumerKey: process.env.CONSUMER_KEY,
     consumerSecret: process.env.CONSUMER_SECRET,
-    callbackURL: 'https://fiskballe-hugosp.c9users.io/login/twitter/return'
+    callbackURL: process.env.CALLBACK_URI
   },
   function(token, tokenSecret, profile, cb) {
     return cb(null, profile);
@@ -43,10 +43,15 @@ app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveU
 app.use('/public', express.static(process.cwd() + '/public'));
 
 app.use(passport.initialize());
-app.use(passport.session());        // must be before Routes!!!!!!
+app.use(passport.session());            // must be before Routes!!!!!!
+
+app.use(function(req, res, next) {      // send req.user to all routes
+  res.locals.user = req.user;
+  next();
+});
 
 app.use('/', routes);
-app.use('/login', user);
+app.use('/', user);
 
 
 app.listen(port,function () {

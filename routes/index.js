@@ -16,7 +16,7 @@ var bg =  [
 
 router.get('/', function(req, res, next) {
 	Poll.find({}).sort('-created_at').limit(6).exec(function(err,polls) {
-		res.render('index', { polls: getRows(polls),bg: bg, user: req.user });
+		res.render('index', { polls: getRows(polls),bg: bg});
 	});
 });
 
@@ -26,14 +26,16 @@ router.get('/view/:id', function(req, res, next) {
 	});
 });
 
-router.get('/vote/:id', function(req, res, next) {
+router.get('/vote/:id', loggedIn, function(req, res) {
 	var query = {'answers._id': req.params.id};
-	var update = {$inc: {'answers.$.votes': 1}};
+	var update = {
+		$inc: {'answers.$.votes': 1},
+		$push: {'personsVoted.twitterID': req.user.id}
+	};
 	var options = {new: true};
 
 	Poll.update(query,update, function(err,doc) {
 		if(err) throw err;
-		//console.log(doc);
 		res.send(doc);
 	});
 });
@@ -46,7 +48,7 @@ router.get('/poll/:id', function(req, res, next) {
 	});
 });
 
-router.get('/add', function(req, res, next) {
+router.get('/add', loggedIn,function(req, res, next) {
 	res.render('addpoll');
 });
 
@@ -60,7 +62,8 @@ router.post('/add', function(req, res, next) {
 	var newPoll = Poll({
 		question: req.body.question,
 		answers: answer,
-		created_at: new Date()
+		created_at: new Date(),
+		userID: req.user.id,
 	});
 
 	newPoll.save(function (err) {
@@ -70,33 +73,19 @@ router.post('/add', function(req, res, next) {
 	res.redirect('/');
 });
 
+router.get('/profile', loggedIn, function(req, res) {
+    Poll.find({ userID: req.user.id }).sort('-created_at').limit(6).exec(function(err, polls) {
+        res.render('profile', { bg:bg, polls: getRows(polls) });
+    });
+});
 
-// ----- TWITT -----------------------------------------------------------------
-/*
-router.get('/login',
-  function(req, res){
-    res.render('login');
-  });
-*/
-router.get('/login/twitter',
-  passport.authenticate('twitter'));
-
-router.get('/login/twitter/return', 
-  passport.authenticate('twitter', { failureRedirect: '/login' }),
-  function(req, res) {
-    res.redirect('/');
-  });
-
-router.get('/profile',
-  require('connect-ensure-login').ensureLoggedIn(),
-  function(req, res){
-    res.render('profile', { user: req.user });
-  });
-
-
-// ----- TWITT -----------------------------------------------------------------
-
-
+function loggedIn(req, res, next) {
+    if (req.user) {
+        next();
+    } else {
+        res.redirect('/login');
+    }
+}
 
 function getRows(items) {
     return items.reduce(function (prev, item, i) {

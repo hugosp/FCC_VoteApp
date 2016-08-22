@@ -1,0 +1,23 @@
+extends layout
+
+block content
+    .container
+        center
+            h1 Login Using
+
+            .error
+                if(error)
+                    h2= message
+
+            .row
+                .column.column-30
+                .column
+                    a(href='/login/twitter')
+                        button Twitter
+                .column
+                    a(href='/login/')
+                        button.inactive GitHub
+                .column
+                    a(href='/login/')
+                        button.inactive FaceBook
+                .column.column-30

@@ -16,7 +16,7 @@ $(document).ready(function() {
         $.ajax({
             url: '/vote/' + id,
             success: function(result) {
-                draw(cId);
+                (result.ok == 1) ? draw(cId) : window.location.href = '/login/';
             }
         });
     });
