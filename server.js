@@ -6,7 +6,7 @@ var mongoose    = require('mongoose');
 var passport    = require('passport');
 var Strategy    = require('passport-twitter').Strategy;
 var routes      = require('./routes/index.js');
-var user      = require('./routes/user.js');
+var user        = require('./routes/user.js');
 require('dotenv').config();
 
 passport.use(new Strategy({
@@ -15,15 +15,15 @@ passport.use(new Strategy({
     callbackURL: process.env.CALLBACK_URI
   },
   function(token, tokenSecret, profile, cb) {
-    return cb(null, profile);
+      return cb(null, profile);
   }));
 
 passport.serializeUser(function(user, cb) {
-  cb(null, user);
+    cb(null, user);
 });
 
 passport.deserializeUser(function(obj, cb) {
-  cb(null, obj);
+    cb(null, obj);
 });
 
 
