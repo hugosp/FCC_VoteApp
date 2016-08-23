@@ -53,7 +53,7 @@ router.get('/add', loggedIn,function(req, res, next) {
 });
 
 
-router.post('/add', function(req, res, next) {
+router.post('/add', loggedIn, function(req, res, next) {
 	var answer =[];
 	for (var i=0; i<req.body.answer.length; i++) {
 		answer.push({answer: req.body.answer[i],votes: 0 });
@@ -73,11 +73,24 @@ router.post('/add', function(req, res, next) {
 	res.redirect('/');
 });
 
+router.get('/delete/:id', loggedIn, function(req, res, next) {
+	Poll.find({_id:req.params.id}).remove(function(err,docs) {
+		if (err) throw err;
+		console.log(docs);
+		res.redirect('/profile');
+	});
+	
+});
+
+
 router.get('/profile', loggedIn, function(req, res) {
     Poll.find({ userID: req.user.id }).sort('-created_at').limit(6).exec(function(err, polls) {
+        //console.log(req.user);
         res.render('profile', { bg:bg, polls: getRows(polls) });
     });
 });
+
+// ----- *** Support Functions *** ---------
 
 function loggedIn(req, res, next) {
     if (req.user) {
@@ -96,7 +109,6 @@ function getRows(items) {
         return prev;
     }, []);
 }
-
 
 
 module.exports = router;

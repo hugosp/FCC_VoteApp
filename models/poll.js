@@ -10,9 +10,9 @@ var pollSchema = new Schema({
     ip: String,
     userID: String,
     created_at: Date,
-    personsVoted: [{
+    personsVoted: {
         twitterID:String
-    }]
+    }
 });
 
 var Poll = mongoose.model('Poll', pollSchema);

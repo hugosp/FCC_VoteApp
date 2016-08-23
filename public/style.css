@@ -36,6 +36,21 @@ li {
     float: left;
 }
 
+.thin {
+    font-weight: 100;
+    margin-right:30px;
+}
+
+.red {
+    background-color: rgb(226,51,51);
+    margin-left: 5px;
+}
+
+.strike {
+    border-left: 1px solid white;
+}
+
+
 .inactive {
     text-decoration: line-through;
 }
@@ -43,6 +58,26 @@ li {
 button {
     background-color: #5DA66F;
     border-color: white;
+}
+
+input[type=submit] {
+    background-color: #5DA66F;
+    border-color: white;
+}
+
+input[type=text] {
+    background-color: white;
+    color: #425957;
+}
+
+a , a:hover , a:visited {
+    color: white;
+}
+
+
+.profile {
+    margin-top: 6px;
+    border: 1px solid white;
 }
 
 ul.nav {
@@ -54,6 +89,7 @@ ul.nav {
     overflow: hidden;
     background-color: #333;
     position : fixed;
+    height: 60px;
 }
 ul.nav li { float:left; }
 

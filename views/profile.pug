@@ -2,21 +2,28 @@ extends layout
 
 block content
     .container
-        h1 User Details :
-        ul
-            li UserID :
-                = user.id
-            li UserName :
-                = user.username
-            li RealName :
-                = user.displayName
-            if (user.emails)
-                li Email :  = user.emails[0].value
-
-        h3 Your Polls :
-        ul
-            each poll in polls
-                each item in poll
-                    li
-                        blockquote
-                            a(href='/view/'+item._id)= item.question
+        .row
+            .column.column-33
+                h3 User Details :
+                ul
+                    li 
+                        h5 USERID
+                            .thin.right= user.id
+                    li 
+                        h5 USERNAME 
+                            .thin.right= user.username
+                    li 
+                        h5 REALNAME  
+                            .thin.right= user.displayName
+            .column.column-67.strike
+                h3 Your Polls :
+                ul
+                    each poll in polls
+                        each item in poll
+                            li
+                                h5= item.question
+                                    a(href='/delete/'+item._id onclick="return confirm('Are you sure you want to delete the poll?')")
+                                        button.right.red X
+                                    a(href='/view/'+item._id)
+                                        button.right View Poll
+                                    
