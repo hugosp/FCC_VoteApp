@@ -26,27 +26,52 @@ router.get('/view/:id', function(req, res, next) {
 	});
 });
 
+router.get('/test/:id', function(req, res) {
+	Poll.find({'answers._id':req.params.id},function(err,polls) {
+	    if (err) throw err;
+/*
+		console.log('Poll : ', polls[0]);
+		//console.log('array : ', polls[0].personsVoted);
+
+		var regged = polls[0].personsVoted.map(function(e) { return e.twitterID; }).indexOf(req.user.id);
+		console.log(pos);
+
+		console.log('is ? array : ', Array.isArray(polls[0].personsVoted.twitterID));
+		console.log('index of id : ', polls[0].personsVoted.twitterID.indexOf(req.user.id));
+*/
+	});
+});
+
+
 router.get('/vote/:id', loggedIn, function(req, res) {
 	Poll.find({'answers._id':req.params.id},function(err,polls) {
 	    if (err) throw err;
-	    if(Array.isArray(polls[0].personsVoted.twitterID)) {						// EHRERE be errors , vote no good start a dance
-		    if(polls[0].personsVoted.twitterID.indexOf(req.user.id) == -1) {		// indexof is evil hest !" "
-		    	var query = {'answers._id': req.params.id};
-				var update = {
-					$inc: {'answers.$.votes': 1},
-					$push: {'personsVoted.twitterID': req.user.id}
-				};
-				var options = {new: true};
-			
-				Poll.update(query,update, function(err,doc) {
-					if(err) throw err;
-					res.json({'loggedIn':true, 'error':false});
-				});
+		var regged = polls[0].personsVoted.map(function(e) { return e.twitterID; }).indexOf(req.user.id);
+
+	    if(Array.isArray(polls[0].personsVoted)) {						// EHRERE be errors , vote no good start a dance
+		    if(regged == -1) {										// indexof is evil hest !" "
+		    	doVote();
 		    } else {
 		    	res.json({'loggedIn':true, 'error':true,'message':'You have already Voted!'});
 		    }
-	    }
+	    } else {
+			doVote();
+		}
 	});
+
+	function doVote() {
+		var query = {'answers._id': req.params.id};
+		var update = {
+			$inc: {'answers.$.votes': 1},
+			$push: {'personsVoted': {'twitterID': req.user.id}}
+		};
+		var options = {new: true};
+
+		Poll.update(query,update, function(err,doc) {
+			if(err) throw err;
+			res.json({'loggedIn':true, 'error':false});
+		});
+	}
 });
 
 
@@ -66,7 +91,7 @@ router.post('/add', loggedIn, function(req, res, next) {
 	var answer = [];
 	var test = [];
 	test[0] = 1111111;
-	
+
 	for (var i=0; i<req.body.answer.length; i++) {
 		answer.push({answer: req.body.answer[i],votes: 0 });
 	}
@@ -91,7 +116,7 @@ router.get('/delete/:id', loggedIn, function(req, res, next) {
 		console.log(docs);
 		res.redirect('/profile');
 	});
-	
+
 });
 
 
