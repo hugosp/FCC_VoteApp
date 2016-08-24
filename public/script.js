@@ -6,8 +6,8 @@ $(document).ready(function() {
         ansNr++;
     });
 
-    $('canvas').click(function(){
-        window.location.href = '/view/'+$(this).attr('id');
+    $('canvas , .indexTopic').click(function(){
+        window.location.href = '/view/'+$(this).attr('data-id');
     });
 
     $('.vote').click(function() {
@@ -16,7 +16,12 @@ $(document).ready(function() {
         $.ajax({
             url: '/vote/' + id,
             success: function(result) {
-                (result.ok == 1) ? draw(cId) : window.location.href = '/login/';
+                console.log(result); 
+                if (result.loggedIn == true) {
+                    (result.error == false) ?  draw(cId) : alert(result.message);
+                } else {
+                    window.location.href = '/login/';
+                }
             }
         });
     });
@@ -57,14 +62,6 @@ $(document).ready(function() {
                         }]
                     },
                     options: {
-                        title: {
-                            display: true,
-                            text: result[0].question,
-                            fontColor: 'white',
-                            fontSize: 22,
-                            fontStyle: 'Normal',
-                            fontFamily: "'Roboto','Helvetica Neue','Helvetica','Arial',sans-serif"
-                        },
                         maintainAspectRatio: true,
                         responsive: true,
                     }

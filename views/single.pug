@@ -2,21 +2,21 @@ extends layout
 
 block content
     .container
-        .jubmo
-            h1= poll[0].question
-            p=  poll[0].created_at
+        .row
+            .column.column-30
+                h3= poll[0].question
+                span='Created at: ' + moment(poll[0].created_at).format("YYYY/MM/DD  hh:mm")
+                br
+                br
+                ul
+                    each ans,index in poll[0].answers
+                        li
+                            .legend
+                                .box(style='background-color: '+bg[index])
+                                .ans.vote(data=ans._id data-canvasID=poll[0]._id data-votes=ans.votes)= ans.answer
+                br
                 br
                 | Vote by clicking the legend labels.
-            br
-            br
-            .row
-                .column.column-20
-                    ul
-                        each ans,index in poll[0].answers
-                            li
-                                .legend
-                                    .box(style='background-color: '+bg[index])
-                                    .ans.vote(data=ans._id data-canvasID=poll[0]._id data-votes=ans.votes)= ans.answer
-                .column.column-60
-                    canvas(id= poll[0]._id width=500 height=500)
-                .column.column-20
+            .column.column-50
+                canvas(id= poll[0]._id width=500 height=500)
+            .column.column-20

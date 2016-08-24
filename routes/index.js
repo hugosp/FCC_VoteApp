@@ -27,16 +27,23 @@ router.get('/view/:id', function(req, res, next) {
 });
 
 router.get('/vote/:id', loggedIn, function(req, res) {
-	var query = {'answers._id': req.params.id};
-	var update = {
-		$inc: {'answers.$.votes': 1},
-		$push: {'personsVoted.twitterID': req.user.id}
-	};
-	var options = {new: true};
-
-	Poll.update(query,update, function(err,doc) {
-		if(err) throw err;
-		res.send(doc);
+	Poll.find({'answers._id':req.params.id},function(err,polls) {
+	    if (err) throw err;
+	    if(polls[0].personsVoted.twitterID.indexOf('25270918') == -1) {
+	    	var query = {'answers._id': req.params.id};
+			var update = {
+				$inc: {'answers.$.votes': 1},
+				$push: {'personsVoted.twitterID': req.user.id}
+			};
+			var options = {new: true};
+		
+			Poll.update(query,update, function(err,doc) {
+				if(err) throw err;
+				res.json({'loggedIn':true, 'error':false});
+			});
+	    } else {
+	    	res.json({'loggedIn':true, 'error':true,'message':'You have already Voted!'});
+	    }
 	});
 });
 
@@ -85,7 +92,6 @@ router.get('/delete/:id', loggedIn, function(req, res, next) {
 
 router.get('/profile', loggedIn, function(req, res) {
     Poll.find({ userID: req.user.id }).sort('-created_at').limit(6).exec(function(err, polls) {
-        //console.log(req.user);
         res.render('profile', { bg:bg, polls: getRows(polls) });
     });
 });

@@ -4,15 +4,18 @@ block content
     .container
         .jubmo
             h1 Hello World!
-            make your own polls , and view others ...
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            p Make your own polls , and view others ... Just sign in with your twitter-account and try it out. . . . . .  
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum neque ante, feugiat at nisi non, interdum sodales tortor. Donec rhoncus velit sem. Integer scelerisque, arcu eget congue imperdiet, ante eros elementum metus, in fermentum quam augue sed ipsum. In hac habitasse platea dictumst. Morbi volutpat purus non pellentesque laoreet. Aliquam vestibulum, nunc et ultrices hendrerit, diam augue pretium metus, ac consectetur tellus risus in velit. In vel massa vel dolor elementum interdum id dictum risus. Phasellus finibus lobortis nulla, nec congue orci dignissim a. Donec vitae efficitur risus. Duis neque ipsum, fringilla vel enim a, rhoncus ullamcorper quam. Nunc lacus arcu, porttitor quis ante et, mollis aliquam erat. Mauris consectetur odio nisl, at ultricies metus convallis eu.
+            
             br
             br
         each poll in polls
             .row
                 each item in poll
-                    .column
-                        canvas(id= item._id width=300 height=300)
+                    .column.border
+                        .indexTopic(data-id= item._id)
+                            h5.center= item.question
+                        canvas(id= item._id data-id= item._id width=300 height=300)
                         ul
                             each ans,index in item.answers
                                 li

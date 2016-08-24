@@ -35,12 +35,14 @@ mongoose.connect(process.env.MONGOLAB_URI);
 app.set('views', process.cwd() + '/views');
 app.set('view engine', 'pug');
 
-app.use(require('morgan')('combined'));
+//app.use(require('morgan')('combined'));
 app.use(require('cookie-parser')());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
 app.use('/public', express.static(process.cwd() + '/public'));
+app.locals.moment = require('moment');
+
 
 app.use(passport.initialize());
 app.use(passport.session());            // must be before Routes!!!!!!
