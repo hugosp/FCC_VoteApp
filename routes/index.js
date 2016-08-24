@@ -29,20 +29,22 @@ router.get('/view/:id', function(req, res, next) {
 router.get('/vote/:id', loggedIn, function(req, res) {
 	Poll.find({'answers._id':req.params.id},function(err,polls) {
 	    if (err) throw err;
-	    if(polls[0].personsVoted.twitterID.indexOf('25270918') == -1) {
-	    	var query = {'answers._id': req.params.id};
-			var update = {
-				$inc: {'answers.$.votes': 1},
-				$push: {'personsVoted.twitterID': req.user.id}
-			};
-			var options = {new: true};
-		
-			Poll.update(query,update, function(err,doc) {
-				if(err) throw err;
-				res.json({'loggedIn':true, 'error':false});
-			});
-	    } else {
-	    	res.json({'loggedIn':true, 'error':true,'message':'You have already Voted!'});
+	    if(Array.isArray(polls[0].personsVoted.twitterID)) {						// EHRERE be errors , vote no good start a dance
+		    if(polls[0].personsVoted.twitterID.indexOf(req.user.id) == -1) {		// indexof is evil hest !" "
+		    	var query = {'answers._id': req.params.id};
+				var update = {
+					$inc: {'answers.$.votes': 1},
+					$push: {'personsVoted.twitterID': req.user.id}
+				};
+				var options = {new: true};
+			
+				Poll.update(query,update, function(err,doc) {
+					if(err) throw err;
+					res.json({'loggedIn':true, 'error':false});
+				});
+		    } else {
+		    	res.json({'loggedIn':true, 'error':true,'message':'You have already Voted!'});
+		    }
 	    }
 	});
 });
@@ -61,7 +63,10 @@ router.get('/add', loggedIn,function(req, res, next) {
 
 
 router.post('/add', loggedIn, function(req, res, next) {
-	var answer =[];
+	var answer = [];
+	var test = [];
+	test[0] = 1111111;
+	
 	for (var i=0; i<req.body.answer.length; i++) {
 		answer.push({answer: req.body.answer[i],votes: 0 });
 	}
@@ -70,7 +75,7 @@ router.post('/add', loggedIn, function(req, res, next) {
 		question: req.body.question,
 		answers: answer,
 		created_at: new Date(),
-		userID: req.user.id,
+		userID: req.user.id
 	});
 
 	newPoll.save(function (err) {
