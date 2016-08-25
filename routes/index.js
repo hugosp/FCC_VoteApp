@@ -26,30 +26,13 @@ router.get('/view/:id', function(req, res, next) {
 	});
 });
 
-router.get('/test/:id', function(req, res) {
-	Poll.find({'answers._id':req.params.id},function(err,polls) {
-	    if (err) throw err;
-/*
-		console.log('Poll : ', polls[0]);
-		//console.log('array : ', polls[0].personsVoted);
-
-		var regged = polls[0].personsVoted.map(function(e) { return e.twitterID; }).indexOf(req.user.id);
-		console.log(pos);
-
-		console.log('is ? array : ', Array.isArray(polls[0].personsVoted.twitterID));
-		console.log('index of id : ', polls[0].personsVoted.twitterID.indexOf(req.user.id));
-*/
-	});
-});
-
-
 router.get('/vote/:id', loggedIn, function(req, res) {
 	Poll.find({'answers._id':req.params.id},function(err,polls) {
 	    if (err) throw err;
 		var regged = polls[0].personsVoted.map(function(e) { return e.twitterID; }).indexOf(req.user.id);
 
-	    if(Array.isArray(polls[0].personsVoted)) {						// EHRERE be errors , vote no good start a dance
-		    if(regged == -1) {										// indexof is evil hest !" "
+	    if(Array.isArray(polls[0].personsVoted)) {
+		    if(regged == -1) {
 		    	doVote();
 		    } else {
 		    	res.json({'loggedIn':true, 'error':true,'message':'You have already Voted!'});
@@ -73,8 +56,6 @@ router.get('/vote/:id', loggedIn, function(req, res) {
 		});
 	}
 });
-
-
 
 router.get('/poll/:id', function(req, res, next) {
 	Poll.find({_id:req.params.id},function(err,polls) {
