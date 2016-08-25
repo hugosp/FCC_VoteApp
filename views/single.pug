@@ -3,7 +3,7 @@ extends layout
 block content
     .container
         .row
-            .column.column-30
+            .column
                 h3= poll[0].question
                 span='Created at: ' + moment(poll[0].created_at).format("YYYY/MM/DD  hh:mm")
                 br
@@ -17,6 +17,11 @@ block content
                 br
                 br
                 | Vote by clicking the legend labels.
-            .column.column-50
+                br
+                br
+                a(href="https://twitter.com/share")
+                    button Tweet this poll
+
+            .column
                 canvas(id= poll[0]._id width=500 height=500)
-            .column.column-20
+

@@ -6,7 +6,7 @@ $(document).ready(function() {
         ansNr++;
     });
 
-    $('canvas , .indexTopic').click(function(){
+    $('.indexTopic').click(function(){
         window.location.href = '/view/'+$(this).attr('data-id');
     });
 
@@ -16,12 +16,7 @@ $(document).ready(function() {
         $.ajax({
             url: '/vote/' + id,
             success: function(result) {
-                console.log(result); 
-                if (result.loggedIn == true) {
-                    (result.error == false) ?  draw(cId) : alert(result.message);
-                } else {
-                    window.location.href = '/login/';
-                }
+                (result.error == false) ?  draw(cId) : alert(result.message);
             }
         });
     });

@@ -21,6 +21,7 @@ body {
     margin-right: 10px;
 }
 
+
 .vote {
     cursor: pointer;
 }
@@ -71,7 +72,7 @@ li {
     text-decoration: line-through;
 }
 
-button {
+button,.button {
     background-color: #5DA66F;
     border-color: white;
 }

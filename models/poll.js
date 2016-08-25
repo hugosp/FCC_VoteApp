@@ -11,7 +11,8 @@ var pollSchema = new Schema({
     userID: String,
     created_at: Date,
     personsVoted: [
-        { twitterID:String }
+        { twitterID:String,
+          ip:String   }
     ]
 });
 

@@ -21,38 +21,42 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/view/:id', function(req, res, next) {
+	var host = req.protocol +'://'+ req.hostname+'/'+req.params.id;
 	Poll.find({_id:req.params.id},function(err,polls) {
-		res.render('single',{poll:polls, bg:bg});
+		res.render('single',{poll:polls, bg:bg, url:host});
 	});
 });
 
-router.get('/vote/:id', loggedIn, function(req, res) {
+router.get('/vote/:id', function(req, res) { 
 	Poll.find({'answers._id':req.params.id},function(err,polls) {
 	    if (err) throw err;
-		var regged = polls[0].personsVoted.map(function(e) { return e.twitterID; }).indexOf(req.user.id);
-
-	    if(Array.isArray(polls[0].personsVoted)) {
-		    if(regged == -1) {
-		    	doVote();
-		    } else {
-		    	res.json({'loggedIn':true, 'error':true,'message':'You have already Voted!'});
-		    }
-	    } else {
-			doVote();
+		var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+		if (req.user) { var regged = polls[0].personsVoted.map(function(e) { return e.twitterID; }).indexOf(req.user.id); }
+		var ipRegged = polls[0].personsVoted.map(function(e) { return e.ip; }).indexOf(ip);
+	    
+		if(regged == -1) {
+			doVote(ip);
+		} else if (ipRegged == -1) {
+			doVote(ip);
+		} 
+		else {
+			res.json({'loggedIn':true, 'error':true,'message':'You have already Voted!'});
 		}
 	});
 
-	function doVote() {
+	function doVote(ip) {
+		var log = false;
 		var query = {'answers._id': req.params.id};
+		if (req.user) { var tw = req.user.id; log = true; } else { var tw = ""; log = false; }
 		var update = {
 			$inc: {'answers.$.votes': 1},
-			$push: {'personsVoted': {'twitterID': req.user.id}}
+			$push: {'personsVoted': {'ip':ip,'twitterID':tw}}
 		};
 		var options = {new: true};
 
 		Poll.update(query,update, function(err,doc) {
 			if(err) throw err;
-			res.json({'loggedIn':true, 'error':false});
+			res.json({'loggedIn':log, 'error':false});
 		});
 	}
 });
@@ -76,7 +80,6 @@ router.post('/add', loggedIn, function(req, res, next) {
 	for (var i=0; i<req.body.answer.length; i++) {
 		answer.push({answer: req.body.answer[i],votes: 0 });
 	}
-	console.log(req.body.answer);
 	var newPoll = Poll({
 		question: req.body.question,
 		answers: answer,
@@ -94,7 +97,6 @@ router.post('/add', loggedIn, function(req, res, next) {
 router.get('/delete/:id', loggedIn, function(req, res, next) {
 	Poll.find({_id:req.params.id}).remove(function(err,docs) {
 		if (err) throw err;
-		console.log(docs);
 		res.redirect('/profile');
 	});
 
